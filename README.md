@@ -18,3 +18,10 @@ In my view
 
 [2] is more difficult but I think it worth it.
 ```
+
+
+## v1
+- Raw Fundamental Analysis
+
+## v2
+- Price Added Fundamental Analysis
