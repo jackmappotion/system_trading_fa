@@ -18,7 +18,7 @@ In my view
 
 [2] is more difficult but I think it worth it.
 ```
-
+- As Fundamental Doesn't have general format / preprocessing required for each model
 
 ## v1
 - Raw Fundamental Analysis
