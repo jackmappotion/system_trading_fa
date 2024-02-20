@@ -77,7 +77,7 @@ class OhlcvPreProc:
         price_ma.sort_values("date", inplace=True)
         return price_ma
 
-class InfoPreproc:
+class InfoPreProc:
     def __init__(self, info) -> None:
         self.info = info.copy()
 
