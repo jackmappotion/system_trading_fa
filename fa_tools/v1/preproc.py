@@ -1,9 +1,12 @@
+import pandas as pd
+
+
 class FundamentalPreProc:
-    def __init__(self, fundamental) -> None:
+    def __init__(self, fundamental: pd.DataFrame) -> None:
         self.fundamental = fundamental.copy()
 
     @staticmethod
-    def _rename_account_nm(account_nm_series):
+    def _rename_account_nm(account_nm_series: pd.Series) -> pd.Series:
         account_rename_dict = {
             "당기순이익": "net_profit",
             "매출액": "raw_profit",
@@ -19,7 +22,7 @@ class FundamentalPreProc:
         return renamed_series
 
     @staticmethod
-    def _rename_columns(fundamental):
+    def _rename_columns(fundamental: pd.DataFrame) -> pd.DataFrame:
         column_rename_dict = {
             "thstrm_amount": "first",
             "frmtrm_amount": "second",
@@ -29,7 +32,7 @@ class FundamentalPreProc:
         return fundamental
 
     @staticmethod
-    def _slice_columns(fundamental):
+    def _slice_columns(fundamental: pd.DataFrame) -> pd.DataFrame:
         using_columns = [
             "reprt_date",
             "reprt_code",
@@ -44,7 +47,7 @@ class FundamentalPreProc:
         return fundamental
 
     @staticmethod
-    def _filter_size(fundamental):
+    def _filter_size(fundamental: pd.DataFrame) -> pd.DataFrame:
         fundamental.dropna(axis=0, inplace=True)
         fundamental_gb = fundamental.groupby("stock_code")
 
@@ -54,7 +57,7 @@ class FundamentalPreProc:
         fundamental = fundamental[fundamental["stock_code"].isin(stock_codes)]
         return fundamental
 
-    def __call__(self):
+    def __call__(self) -> pd.DataFrame:
         fundamental = self.fundamental
         fundamental["stock_code"] = fundamental["stock_code"].apply(lambda x: str(x).zfill(6))
         fundamental["factor"] = self._rename_account_nm(fundamental["account_nm"])
