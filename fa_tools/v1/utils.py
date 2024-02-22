@@ -2,6 +2,7 @@
 Mapping Tools
     - General Fundamental factor calcuating
 """
+
 import pandas as pd
 from functools import wraps
 
@@ -18,7 +19,7 @@ def except_return_zero(func):
 
 
 @except_return_zero
-def get_alr(factor_dict):
+def get_alr(factor_dict: dict) -> float:
     """
     ALR : Asset Liquidity Ratio
     """
@@ -27,7 +28,7 @@ def get_alr(factor_dict):
 
 
 @except_return_zero
-def get_cdr(factor_dict):
+def get_cdr(factor_dict: dict) -> float:
     """
     CAR : Current Debt Ratio
     """
@@ -36,7 +37,7 @@ def get_cdr(factor_dict):
 
 
 @except_return_zero
-def get_tdr(factor_dict):
+def get_tdr(factor_dict: dict) -> float:
     """
     TDR : Total Debt Ratio
     """
@@ -45,7 +46,7 @@ def get_tdr(factor_dict):
 
 
 @except_return_zero
-def get_opr(factor_dict):
+def get_opr(factor_dict: dict) -> float:
     """
     OPR : Operation Profit Ratio
     """
@@ -55,7 +56,7 @@ def get_opr(factor_dict):
 
 
 @except_return_zero
-def get_npr(factor_dict):
+def get_npr(factor_dict: dict) -> float:
     """
     NPR : Net Profit Ratio
     """
@@ -64,7 +65,7 @@ def get_npr(factor_dict):
 
 
 @except_return_zero
-def get_oer(factor_dict):
+def get_oer(factor_dict: dict) -> float:
     """
     OPR : Operation Expense Ratio
     """
@@ -74,7 +75,7 @@ def get_oer(factor_dict):
 
 
 @except_return_zero
-def get_ter(factor_dict):
+def get_ter(factor_dict: dict) -> float:
     """
     TER : Total Expense Ratio
     """
