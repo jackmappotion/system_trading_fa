@@ -77,14 +77,13 @@ class OhlcvPreProc:
         price_ma.sort_values("date", inplace=True)
         return price_ma
 
-class InfoPreProc:
-    def __init__(self, info) -> None:
-        self.info = info.copy()
+class StockPreProc:
+    def __init__(self, stocks) -> None:
+        self.stocks = stocks.copy()
 
     def get_shares(self):
-        info = self.info
-        info = info.rename(columns={"Code": "stock_code"})
-        shares = info.set_index("stock_code")["Stocks"].rename("shares").reset_index()
+        stocks = self.stocks
+        shares = stocks.set_index("stock_code")["shares"].reset_index()
         return shares
 
 
