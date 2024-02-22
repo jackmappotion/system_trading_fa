@@ -1,24 +1,25 @@
 import numpy as np
+import pandas as pd
 
 
 class FaProc:
-    def __init__(self, fundamental) -> None:
+    def __init__(self, fundamental: pd.DataFrame) -> None:
         self.fundamental = fundamental
 
     @staticmethod
-    def _filter(fundamental, reprt_no):
+    def _filter(fundamental: pd.DataFrame, reprt_no: str) -> pd.DataFrame:
         filtered_fundamental = fundamental[fundamental["reprt_no"] == reprt_no].copy()
         return filtered_fundamental
 
     @staticmethod
-    def _preproc(fundamental):
+    def _preproc(fundamental: pd.DataFrame) -> pd.DataFrame:
         fundamental = fundamental.pivot(index=["stock_code"], columns=["factor"], values=["amount"])
         fundamental.columns = fundamental.columns.get_level_values(1)
         fundamental = fundamental.replace(0, np.NaN)
         return fundamental
 
     @staticmethod
-    def _proc(fundamental):
+    def _proc(fundamental) -> pd.DataFrame:
         # current related
         fundamental["CBPS"] = (
             fundamental["current_assets"] - fundamental["current_liabilities"]
@@ -56,7 +57,7 @@ class FaProc:
         return fundamental
 
     @staticmethod
-    def _postproc(fundamental):
+    def _postproc(fundamental) -> pd.DataFrame:
         using_columns = [
             "CBPS",
             "CPBR",
@@ -75,7 +76,7 @@ class FaProc:
         fundamental = fundamental.loc[:, using_columns]
         return fundamental
 
-    def __call__(self, reprt_no):
+    def __call__(self, reprt_no: str) -> pd.DataFrame:
         fundamental = self._filter(self.fundamental, reprt_no)
         fundamental = self._preproc(fundamental)
         fundamental = self._proc(fundamental)
