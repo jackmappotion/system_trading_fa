@@ -3,11 +3,11 @@ import pandas as pd
 
 
 class FundamentalPreProc:
-    def __init__(self, fundamental) -> None:
+    def __init__(self, fundamental: pd.DataFrame) -> None:
         self.fundamental = fundamental.copy()
 
     @staticmethod
-    def _rename_account_nm(account_nm_series):
+    def _rename_account_nm(account_nm_series: pd.Series) -> pd.Series:
         account_rename_dict = {
             "당기순이익": "net_profit",
             "매출액": "raw_profit",
@@ -23,7 +23,7 @@ class FundamentalPreProc:
         return renamed_series
 
     @staticmethod
-    def _format_specific_amount(fundamental, amount_nm):
+    def _format_specific_amount(fundamental: pd.DataFrame, amount_nm: str) -> pd.DataFrame:
         def _filter_specific_amount(fundamental, amount_nm):
             col_except_amount = [col for col in fundamental.columns if col not in ["0", "1", "2"]]
             _fundamental_df = fundamental.loc[:, col_except_amount + [amount_nm]].rename(
@@ -39,7 +39,7 @@ class FundamentalPreProc:
         return _fundamental
 
     @staticmethod
-    def _rename_columns(fundamental):
+    def _rename_columns(fundamental: pd.DataFrame) -> pd.DataFrame:
         column_rename_dict = {
             "reprt_date": "date",
             "thstrm_amount": "0",
@@ -49,7 +49,7 @@ class FundamentalPreProc:
         fundamental = fundamental.rename(columns=column_rename_dict)
         return fundamental
 
-    def __call__(self):
+    def __call__(self) -> pd.DataFrame:
         fundamental = self.fundamental
         fundamental["stock_code"] = fundamental["stock_code"].apply(lambda x: str(x).zfill(6))
         fundamental["factor"] = self._rename_account_nm(fundamental["account_nm"])
@@ -61,13 +61,14 @@ class FundamentalPreProc:
         fundamental.sort_values("date", inplace=True)
         return fundamental
 
+
 class OhlcvPreProc:
-    def __init__(self, ohlcv) -> None:
+    def __init__(self, ohlcv: pd.DataFrame) -> None:
         self.ohlcv = ohlcv.copy()
 
-    def get_ma_prices(self, window=32):
+    def get_ma_prices(self, window: int = 32) -> pd.DataFrame:
         ohlcv = self.ohlcv
-        ohlcv = ohlcv.rename(columns={"Close": "price"})
+        ohlcv = ohlcv.rename(columns={"close": "price"})
         ohlcv.index.name = "date"
 
         ohlcv.index = pd.to_datetime(ohlcv.index)
@@ -77,24 +78,27 @@ class OhlcvPreProc:
         price_ma.sort_values("date", inplace=True)
         return price_ma
 
+
 class StockPreProc:
-    def __init__(self, stocks) -> None:
+    def __init__(self, stocks: pd.DataFrame) -> None:
         self.stocks = stocks.copy()
 
-    def get_shares(self):
+    def get_shares(self) -> pd.DataFrame:
         stocks = self.stocks
         shares = stocks.set_index("stock_code")["shares"].reset_index()
         return shares
 
 
 class FaPreProc:
-    def __init__(self, fundamental, prices, shares) -> None:
+    def __init__(
+        self, fundamental: pd.DataFrame, prices: pd.DataFrame, shares: pd.DataFrame
+    ) -> None:
         self.fundamental = fundamental
         self.prices = prices
         self.shares = shares
 
     @staticmethod
-    def _melt_args_to_factor(fundamental):
+    def _melt_args_to_factor(fundamental: pd.DataFrame) -> pd.DataFrame:
         fundamental_price_b = fundamental.loc[
             :, ["date", "stock_code", "price", "shares", "reprt_no"]
         ].drop_duplicates()
@@ -106,7 +110,7 @@ class FaPreProc:
         )
         return fundamental_price_b
 
-    def __call__(self):
+    def __call__(self) -> pd.DataFrame:
         fundamental_price = pd.merge_asof(
             left=self.fundamental,
             right=self.prices,
