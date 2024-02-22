@@ -1,16 +1,20 @@
+import numpy as np
+import pandas as pd
+from typing import List, Tuple
 from .utils import *
 
+
 class FaProc:
-    def __init__(self, factor_df, stock_code) -> None:
+    def __init__(self, factor_df: pd.DataFrame, stock_code: str) -> None:
         self.factor_df = self._filter_factor_df(factor_df, stock_code)
 
     @staticmethod
-    def _filter_factor_df(factor_df, stock_code):
+    def _filter_factor_df(factor_df: pd.DataFrame, stock_code: str) -> pd.DataFrame:
         filtered_factor_df = factor_df[factor_df["stock_code"] == stock_code].copy()
         return filtered_factor_df
 
     @staticmethod
-    def get_factor_dict(factor_df, arg):
+    def get_factor_dict(factor_df: pd.DataFrame, arg: str) -> pd.DataFrame:
         """
         arg : ['first','second','third']
         """
@@ -19,7 +23,7 @@ class FaProc:
         return factor_dict
 
     @staticmethod
-    def append_factors(factor_dict):
+    def append_factors(factor_dict: dict) -> dict:
         factor_dict["ALR"] = get_alr(factor_dict)
 
         factor_dict["CDR"] = get_cdr(factor_dict)
@@ -32,7 +36,7 @@ class FaProc:
         factor_dict["TER"] = get_ter(factor_dict)
         return factor_dict
 
-    def __call__(self):
+    def __call__(self) -> pd.DataFrame:
         factor_df = self.factor_df
 
         first_factor_dict = self.get_factor_dict(factor_df, "first")
@@ -49,11 +53,12 @@ class FaProc:
         ).T
         return df
 
+
 class FaController:
-    def __init__(self, factor_analysis_df) -> None:
+    def __init__(self, factor_analysis_df: pd.DataFrame) -> None:
         self.factor_analysis_df = factor_analysis_df.copy()
 
-    def _get_filtered_stocks(self, factor, condition):
+    def _get_filtered_stocks(self, factor: str, condition: function):
         factor_analysis_df = self.factor_analysis_df
 
         _factor_analysis_df = factor_analysis_df[factor_analysis_df["factor"] == factor]
@@ -63,13 +68,13 @@ class FaController:
         filtered_stocks = set(self._get_stocks_from_result(result))
         return filtered_stocks
 
-    def get_filtered_stocks(self, factor_conditions):
+    def get_filtered_stocks(self, factor_conditions: List[Tuple[str, function]]):
         filtered_stocks_list = list()
         for factor, condition in factor_conditions:
             filtered_stocks_list.append(self._get_filtered_stocks(factor, condition))
         return set.intersection(*filtered_stocks_list)
 
     @staticmethod
-    def _get_stocks_from_result(result):
+    def _get_stocks_from_result(result: pd.DataFrame) -> np.array:
         filtered_stocks = result[result == True].reset_index()["stock_code"].to_numpy()
         return filtered_stocks
