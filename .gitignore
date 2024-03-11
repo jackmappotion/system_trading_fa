@@ -11,6 +11,8 @@ data_v2/
 # !v1_01_pps.ipynb
 # !v1_02_model_prod.ipynb
 !*_blueprint.ipynb
+!PriceDependent_example.ipynb
+!PriceIndependent_example.ipynb
 
 # Python
 __pycache__/
