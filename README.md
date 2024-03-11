@@ -4,7 +4,7 @@
 
 ```
 Fundamental Analysis can be little tricky to make model.  
-Because it doesn't have general csv format.  
+Because it doesn't have general data format.  
 So I fixed it in my apetite
 
 In my view
@@ -20,8 +20,8 @@ In my view
 ```
 - As Fundamental Doesn't have general format / preprocessing required for each model
 
-## v1
+## PriceIndependent
 - Raw Fundamental Analysis
 
-## v2
+## PriceDependent
 - Price Added Fundamental Analysis

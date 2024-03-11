@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 
-class FaProc:
+class FundamentalProc:
     def __init__(self, fundamental: pd.DataFrame) -> None:
         self.fundamental = fundamental
 

@@ -1,10 +1,11 @@
 import numpy as np
 import pandas as pd
-from typing import List, Tuple
+from typing import List, Tuple, Callable
+
 from .utils import *
 
 
-class FaProc:
+class FundamentalProc:
     def __init__(self, factor_df: pd.DataFrame, stock_code: str) -> None:
         self.factor_df = self._filter_factor_df(factor_df, stock_code)
 
@@ -54,11 +55,11 @@ class FaProc:
         return df
 
 
-class FaController:
+class FundamentalController:
     def __init__(self, factor_analysis_df: pd.DataFrame) -> None:
         self.factor_analysis_df = factor_analysis_df.copy()
 
-    def _get_filtered_stocks(self, factor: str, condition: function):
+    def _get_filtered_stocks(self, factor: str, condition: Callable):
         factor_analysis_df = self.factor_analysis_df
 
         _factor_analysis_df = factor_analysis_df[factor_analysis_df["factor"] == factor]
@@ -68,7 +69,7 @@ class FaController:
         filtered_stocks = set(self._get_stocks_from_result(result))
         return filtered_stocks
 
-    def get_filtered_stocks(self, factor_conditions: List[Tuple[str, function]]):
+    def get_filtered_stocks(self, factor_conditions: List[Tuple[str, Callable]]):
         filtered_stocks_list = list()
         for factor, condition in factor_conditions:
             filtered_stocks_list.append(self._get_filtered_stocks(factor, condition))
